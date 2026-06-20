@@ -1,0 +1,14 @@
+
+path: /kaggle/input/datasets/markolazarevi/hagrid-fingers-yolo/fingers_yolo
+
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: zero
+  1: one
+  2: two
+  3: three
+  4: four
+  5: five
