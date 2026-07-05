@@ -82,6 +82,8 @@ Tačnost je odskočila za skoro četvrtinu u odnosu na KNN model.
 
 ## Detekcija broja podignutih prstiju pomoću CNN modela
 
+Sveska u kojoj se može videti proces treniranja i evaluacije modela [https://www.kaggle.com/code/mrkkopr/raw-cnn](https://www.kaggle.com/code/mrkkopr/raw-cnn)
+
 Ponovo je vršena sistematična pretraga hiperparametara konvolutivne neuronske mreže, pri čemu su ispitivane sledeće kombinacije i to za
 1) čitavu sliku:
     - rezolucije ulazne slike: 128×128 i 256×256 piksela  
@@ -113,25 +115,21 @@ Najbolja konfiguracija bila je:
 - broj filtera: 32
 - broj skrivenih slojeva potpuno povezan mreže: 0
 
-Postignuta tačnost je bila 
+Postignuta tačnost je bila 37,61% u epohi 99. Prvih 17 epoha model nije uspeo da nauči bilo kakave korisne karakteristike (tačnost je oscilovala oko 20% i na trening i na validacionom skupu). Do 31. epohe model uči većinom korisne karakteristike koje pomažu u boljoj generalizaciji, što se uočava na osnovu skoka tačnosti sa oko 20% na 26,52%, koja je približno ista i na validacionom i na trening skupu. U sledećim epohama model se u najvećoj meri prepilagođava dostižući tačnost od preko 70% na trening skupu. Ipak, uspeva da poboljša tačnost i na validacionom skupu na 37,61% (odnosno 38,64%), što je značajno veća tačnost u odnosu na KNN, ali nedovoljno velika za bilo kakvu praktičnu upotrebu.
 
 ---
 
 ### Rezultati sa lokalizacijom šake (bounding box)
 
-Nakon izdvajanja regiona šake korišćenjem YOLO koordinata ograničavajućeg pravougaonika (*bounding box*) uz dodatnu marginu od 10%, primenjena je ista procedura optimizacije hiperparametara.
+Najbolja konfiguracija bila je:
 
-Ispitivani parametri bili su:
+- dimenzije: 64x64 piksela
+- konvolucionih slojeva: 3
+- broj filtera: 32
+- broj skrivenih slojeva potpuno povezan mreže: 1
+- broj neurona u prvom skrivenom sloju potpuno povezane mreže: 128
+- verovatnoća gašenja neurona: 0.4
 
-- dimenzije: 8×8, 16×16, 32×32 i 64×64  
-- broj suseda: 3, 6, 9, 15, 35, 50, 100 i 500  
-
-Najbolja konfiguracija bila je 16×16 i 6 suseda, sa:
-
-- tačnošću na validacionom skupu od **62,95%**  
-- tačnošću na test skupu od **61,27%**
-
-Ovo predstavlja poboljšanje od skoro 2 puta u odnosu na model koji koristi celu sliku.
 
 ---
 
