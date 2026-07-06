@@ -82,7 +82,7 @@ Najbolji rezultati su uočeni za rezoluciju slike 16x16, C = 10 i γ = 0.1 i to:
 
 Tačnost je odskočila za skoro četvrtinu u odnosu na KNN model.
 
-![Uporedjivanje modela](images/cnn_full_epoch_stats.png)
+![Uporedjivanje modela](images/bbx_statistics_by_model.png)
 
 ## Detekcija broja podignutih prstiju pomoću CNN modela
 
