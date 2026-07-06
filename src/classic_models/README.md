@@ -21,6 +21,8 @@ Tokom prve 31 epohe, tačnost na trening i validacionom skupu bila je približno
 
 Stabilizacija tačnosti iznad 20% dogodila se nakon približno 17 epoha. Kasnije dolazi do preprilagođavanje koje postaje sve veće i veće, premda su i performanse na validacionom skupu odskočile na 38,64% što ukazuje na uočavanje određenih karakteristika koje poboljšavaju generalizaciju. Ipak, performanse na trening skupu jasno ukazuju na dominaciju fokusiranje mreže na usko specifične karakteristike vezane za trening skup spram opštih karakteristika koje poboljšavaju generalizaciju.
 
+![Statistike iz epoha](images/cnn_full_epoch_stats.png)
+
 ---
 
 ## Detekcija broja podignutih prstiju pomoću KNN modela
@@ -80,6 +82,8 @@ Najbolji rezultati su uočeni za rezoluciju slike 16x16, C = 10 i γ = 0.1 i to:
 
 Tačnost je odskočila za skoro četvrtinu u odnosu na KNN model.
 
+![](images/cnn_full_epoch_stats.png)
+
 ## Detekcija broja podignutih prstiju pomoću CNN modela
 
 Sveska u kojoj se može videti proces treniranja i evaluacije modela [https://www.kaggle.com/code/mrkkopr/raw-cnn](https://www.kaggle.com/code/mrkkopr/raw-cnn)
@@ -130,7 +134,9 @@ Najbolja konfiguracija bila je:
 - broj neurona u prvom skrivenom sloju potpuno povezane mreže: 128
 - verovatnoća gašenja neurona: 0.4
 
+Postignuta je tačnost od 88,83% na validacionom skupu u 99. epohi. Najveći skok u tačnosti je primećen u prve 23 epohe, kada je ona dostigla oko 84%, nakon čega je model imao veću tendenciju da se prepilagodi trening skupu, a ne da nauči karakteristike same raspodele. Postignuta tačnost na test skupu iznosila je 89,4%. 
 
+![CNN bounding box matrica konfuzije](images/bbx_conf_matrix.png)
 ---
 
 ## Zaključak
