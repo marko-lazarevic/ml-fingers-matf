@@ -6,7 +6,7 @@
 
 ## Cilj
 
-Cilj koji smo želeli da ostavirmo je kreiranje modela za prepoznavanje pozicije šake na slici i prepoznavanje broja podignutih prstiju, odnosno klasifikacij sa klasama 0,1,2,3,5.
+Cilj koji smo želeli da ostavirmo je kreiranje modela za prepoznavanje pozicije šake na slici i prepoznavanje broja podignutih prstiju, odnosno klasifikacij sa klasama 0,1,2,3,4,5.
 
 ## Kreiranje modela
 
@@ -14,7 +14,7 @@ U toku našeg rada bilo je nekoliko pokušaja treniranja modela YOLO familije, a
 
 ### Pokušaj 1
 
-Skup podatako koji smo koristili u prvom pokušaju može se pogledati [ovde](https://universe.roboflow.com/hands-rirpj/fingers-numbers). Na prvi pogled ovaj skup je delovao jako dobro, specifično je napravljen za klasifikaciju koju smo mi želeli da radimo, prolaskom kroz određeni broj slika delovalo je da je raspodela podataka dosta dobra i očekivali smo dobre rezultate.
+Skup podatako koji smo koristili u prvom pokušaju može se pogledati [ovde](https://universe.roboflow.com/hands-rirpj/fingers-numbers). Na prvi pogled ovaj skup je delovao jako dobro, specifično je napravljen za problem koji smo mi želeli da rešavamo, prolaskom kroz određeni broj slika delovalo je da je raspodela podataka dosta dobra i očekivali smo dobre rezultate.
 
 Model smo trenirali više puta sa varijacijama hiperparametara i samog pretreniranog modela ali ovde ćemo opisati jedan uopšten proces i zaključak jer su variajcije između modela minimalne.
 
@@ -46,9 +46,16 @@ Na narednim slikama možemo videti primere po jedne slike klase dva iz skupa za 
 
 Jasno je da se praktično isti podataka nalazi u sva tri skupa. Samim tim model se ponaša izvanredno na validacionom i test skupu ali dalje od toga ne može. Ovom analizom utvrdili smo da skup podataka korišćen u prvom pokušaju nije adekvatan pa smo se odlučili za pronalazak novog skupa podataka.
 
+Iako smo validacioni skup izdvojili nasumičnim izborom to nije bio najveći problem. U samom skupu podataka raspodela je jako loša sve slike su slikane sa slične udaljenosti u sličnim uslovima osvetljenja sa pozadinama u kojima se šaka jasno izdvaja.
+
 ### Pokušaj 2
 
-Za drugi pokušaj rešavanje našeg problema pronašli smo skup podataka [HaGRID](https://github.com/hukenovs/hagrid). Ovaj skup ima preko milion slika, sa preko 60.000 različitih osoba i scena bez ponavljanja slika. Samim tim ovaj skup omogućava jednostavno deljenje na skupove za trening, test i validaciju. Ipak slike u ovom skupu su FullHD rezolucije i ukupno yauyimaju preko 1.5TB memorije. Drugi problem je što su klase slika drugačije od onih koje su potrebne za naš projekat.
+Za drugi pokušaj rešavanje našeg problema pronašli smo skup podataka [HaGRID](https://github.com/hukenovs/hagrid). Ovaj skup ima preko milion slika, sa preko 60.000 različitih osoba i scena bez ponavljanja slika i bez velike sličnosti u istim klasama. Samim tim ovaj skup omogućava jednostavno deljenje na skupove za trening, test i validaciju. Ipak slike u ovom skupu su FullHD rezolucije i ukupno zauzimaju preko 1.5TB memorije. Drugi problem je što su klase slika drugačije od onih koje su potrebne za naš projekat.
+
+Na narednim slikama možemo videti varijaciju raspodele klase 4 na primeru dve slike:
+
+![Klasa 4 slika 1](./v02/4_1.jpg)
+![Klasa 4 slika 2](./v02/4_2.jpg)
 
 Prvi problem rešili smo pronalaženjem podskupa originalnog skupa podataka koji ima 30k slika rezolucije 384p i nalazi se [ovde](https://www.kaggle.com/datasets/innominate817/hagrid-sample-30k-384p).
 
@@ -64,9 +71,11 @@ Drugi problem rešili smo reklasifikovanjem datih klasa. U narednoj tabeli prika
 | 5          | palm, stop, stop_inverted                                  |
 | Uklonjeno  | grabbing, grip, no_gesture, ok, point                      |
 
-Za potrebe reklasifikacije kreirali smo [kaggle notebook](https://www.kaggle.com/code/markolazarevi/hagrid-reclass-yolo) gde smo direktno ulazni dataset obradili, reklasifikovali i kreirali novi dataset.
+Uklonjene klase nisu mogle deterministički biti rasporedjene u neku od novih klasa pa su iz tog razloga u potpunosti uklonjene.
 
-Ulazni podaci bili su raspoređeni na sledeći način:
+Za potrebe reklasifikacije i pripreme podataka kreirali smo [kaggle notebook](https://www.kaggle.com/code/markolazarevi/hagrid-reclass-yolo) gde smo direktno ulazni dataset obradili, reklasifikovali i kreirali novi dataset.
+
+Ulazni podaci nakon reklasifikacije bili su raspoređeni na sledeći način:
 
 ```
 0 1735
@@ -98,6 +107,24 @@ Val: 2628
 Test: 2632
 ```
 
+> Napomena: Naumična podela podataka u ovom slučaju je u potpunosti validna zbog prirode skupa podataka.
+
 Slike i njihove labele smo na kraju rasporedili u odgovarajuće direktorijume i kao izlaz dobili [novi dataset](https://www.kaggle.com/datasets/markolazarevi/hagrid-fingers-yolo) koji je bio spreman za yolo modele.
 
 Na kraju smo kreirali notebook koji je kao ulaz imao prethodno kreirani dataset i u kom smo trenirali standardan yolo model. Notebook se može videti [ovde](https://www.kaggle.com/code/markolazarevi/yolo-fingers).
+
+Tokom treninga dobili smo bolje rezultate nego sa prethodnim skupom podataka. Iako je raspodela podataka kompleksnija, sam skup podataka je dosta bogatiji što je modelu omogućilo da ga dobro nauči. Takođe model je na neviđenim podacima (slikama sa naše veb kamere) pokazao sjajne rezultate.
+
+Naredne slike pokazuju metrike na validacionom skupu podataka.
+
+Matrica konfuzije:
+![Matrica konfuzije](./v02/confusion_matrix.png)
+
+Kriva preciznosti (precision):
+![Kriva preciznosti (precision)](./v02/BoxP_curve.png)
+
+Kriva odziva (recall):
+![Kriva odziva (recall)](./v02/BoxR_curve.png)
+
+Kriva F1 mere:
+![Kriva F1 mere](./v02/BoxF1_curve.png)
