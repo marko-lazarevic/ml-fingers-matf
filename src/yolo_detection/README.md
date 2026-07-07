@@ -113,7 +113,7 @@ Slike i njihove labele smo na kraju rasporedili u odgovarajuće direktorijume i 
 
 Na kraju smo kreirali notebook koji je kao ulaz imao prethodno kreirani dataset i u kom smo trenirali standardan yolo model. Notebook se može videti [ovde](https://www.kaggle.com/code/markolazarevi/yolo-fingers).
 
-Tokom treninga dobili smo bolje rezultate nego sa prethodnim skupom podataka. Iako je raspodela podataka kompleksnija, sam skup podataka je dosta bogatiji što je modelu omogućilo da ga dobro nauči. Takođe model je na neviđenim podacima (slikama sa naše veb kamere) pokazao sjajne rezultate.
+Tokom treninga dobili smo bolje rezultate nego sa prethodnim skupom podataka. Iako je raspodela podataka kompleksnija, što je modelu omogućilo da uspešno generalizuje. Takođe model je na neviđenim podacima (slikama sa naše veb kamere) pokazao sjajne rezultate.
 
 Naredne slike pokazuju metrike na validacionom skupu podataka.
 
@@ -129,7 +129,7 @@ Kriva odziva (recall):
 Kriva F1 mere:
 ![Kriva F1 mere](./v02/BoxF1_curve.png)
 
-Naredni grafikoni prikazuju krive gubitka i metrike evaluacije kroz epohe za model treniran na modifikovanom HaGRID skupu podataka:
+Naredni grafikoni prikazuju krive gubitka i metrike evaluacije kroz epohe:
 
 ![Rezultati treninga](./v02/results.png)
 
