@@ -2,26 +2,27 @@
 
 Slike su skalirane na fiksnu kvadratnu dimenziju, dok su pikseli konvertovani u jedan ulazni kanal (grayscale, crno-bele slike) i normalizovani na opseg vrednosti \[0,1].
 
-Klasični modeli i modeli konvolutivnih neuronskih mreža pokazali su nisku tačnost pri klasifikaciji slika po broju podignutih prstiju kada se kao ulaz koristi cela slika. Osnovni uzrok ovog problema je činjenica da šaka zauzima relativno mali deo slike, dok dominantan deo čini pozadina.
+## <H2>Rezultati na prvobitnom skupu podataka</H2>
 
-Kod klasičnih modela (KNN – *k-nearest neighbors*) ulazni podatak predstavlja vektor svih piksela slike dobijen njenim poravnavanjem u jednodimenzioni niz. Pošto šaka zauzima mali procenat ukupnog broja piksela, euklidsko rastojanje između primeraka u velikoj meri zavisi od pozadine, a ne od broja podignutih prstiju.
+Korišćeni skup je opisan u [../src/yolo_detection/README.md](https://github.com/marko-lazarevic/ml-fingers-matf/blob/main/src/yolo_detection/README.md), a u pitanju je skup [Fingers numbers](https://universe.roboflow.com/hands-rirpj/fingers-numbers). 
+Sveska: [../src/classic_models/knn_old_dataset_01.ipynb](https://github.com/marko-lazarevic/ml-fingers-matf/blob/main/src/classic_models/knn_old_dataset_01.ipynb).
+Da bi sveska bila ponovno pokrenuta potrebno je preuzeti skup podataka sa navedenog linka (pri preuzimanju odabrati opcije download dataset zip file i download zip file to computer) i raspakovati ga u korenom direktorijumu repozitorijuma (ml-fingers-matf).
+Ispitivano je više instanci knn, a kao nabolja na test skupu se pokazala ona koja koristi standard skejler za dodatnu normalizaciju podataka, PCA da izdvoji 100 najznačajnijih komponenti i broj najbližih suseda koji iznosi 5. Veličine slika 32x32 su se pokazale kao najbolje.
 
-Najbolji rezultat u ovom slučaju postignut je za rezoluciju 16×16 i 500 najbližih suseda, pri čemu tačnost na test skupu iznosi **21,83%**.
+Model, iako je pokazao tačnost od preko 70%, ne uspeva dobro da klasifikuju slike koje ne pripadaju skupu podataka, zbog već opisanih mana skupa podataka.
 
-Standardna konvolutivna neuronska mreža (CNN) takođe nije uspela da postigne zadovoljavajuću generalizaciju. Za razliku od KNN, kod CNN je u kasnijim epohama došlo do izraženog preprilagođavanja, pri čemu je razlika između trening i validacionih rezultata postajala značajna.
+## <H2>Rezultati na novom skupu podataka</H2>
 
-CNN nema eksplicitan mehanizam za lokalizaciju objekta od interesa, pa deo kapaciteta mreže biva iskorišćen za modelovanje pozadine umesto relevantnih delova slike (šake).
+Korišćeni skup je opisan u [../src/yolo_detection/README.md](https://github.com/marko-lazarevic/ml-fingers-matf/blob/main/src/yolo_detection/README.md), a u pitanju je skup [Fingers numbers](https://universe.roboflow.com/hands-rirpj/fingers-numbers). 
+Sveska: [Podsku skupa HaGRID](https://www.kaggle.com/datasets/markolazarevi/hagrid-fingers-yolo).
+Da bi knn i svm sveske bile ponovno pokrenute potrebno je preuzeti skup podataka sa navedenog linka i raspakovati ga u novom kreiranom direktorijumu fingers_yolo koji treba da bude u direktorijumu iznad korenog direktorijuma repozitorijuma (ml-fingers-matf).
+Da bi sveska raw_cnn (konvolutivne) bila pokrenuta potrebno je prilagoditi sve putanje u kodu ili je jednostavno pokrenuti na sajtu [raw-cnn](https://www.kaggle.com/code/mrkkopr/raw-cnn) za šta je potrebna prijava. Sveska koja je dostupna u okviru repozitorijuma je preuzeta sa navedenog linka. 
 
-Model je dostigao maksimalnu tačnost od **37,61%** na validacionom skupu u 99. epohi, dok je na test skupu ostvarena tačnost od **38,64%**. Tačnost na trening skupu iznosila je **70,92%** i jasno ukazuje na preprilagođavanje.
+Klasični modeli i modeli konvolutivnih neuronskih mreža pokazali su nisku tačnost pri klasifikaciji slika po broju podignutih prstiju kada se kao ulaz koristi cela slika. Osnovni uzrok ovog problema je činjenica da šaka zauzima relativno mali deo slike, dok dominantan deo čini pozadina, a ovi modeli nemaju dovoljo dobar mehanizam usmeravanja pažnje na određeni deo slike. Konvolutivne neuronske mreže su se pokazale najveću tačnost pri klasifikaciji. Za razliku od klasičnih modela, konvolutivna neuronska mreža je uspela da postigne mnogo bolju tačnost klasifikacije na trening skupu, ali zbog toga što je model uspeo da se preprilagodi podacima.
 
-Tokom prve 31 epohe, tačnost na trening i validacionom skupu bila je približno jednaka. Najviša zabeležena tačnost u tom periodu bila je:
+Mnogo bolja tačnost klasifikacije postignuta je kada se slika obseče samo da sadrži deo koji upada u bounding box oko šake (što se kao informacija izvlači iz skupa podataka). Konvolutivne neuronske mreže su ponove pokazale najveću tačnost pri klasifikaciji, što je i očekivano.
 
-- validacioni skup: **26,52%** (epoha 31)  
-- trening skup: **26,93%** (epoha 31)
-
-Stabilizacija tačnosti iznad 20% dogodila se nakon približno 17 epoha. Kasnije dolazi do preprilagođavanje koje postaje sve veće i veće, premda su i performanse na validacionom skupu odskočile na 38,64% što ukazuje na uočavanje određenih karakteristika koje poboljšavaju generalizaciju. Ipak, performanse na trening skupu jasno ukazuju na dominaciju fokusiranje mreže na usko specifične karakteristike vezane za trening skup spram opštih karakteristika koje poboljšavaju generalizaciju.
-
-![Statistike iz epoha](images/cnn_full_epoch_stats.png)
+![Uporedjivanje modela](images/bbx_statistics_by_model.png)
 
 ---
 
@@ -82,11 +83,11 @@ Najbolji rezultati su uočeni za rezoluciju slike 16x16, C = 10 i γ = 0.1 i to:
 
 Tačnost je odskočila za skoro četvrtinu u odnosu na KNN model.
 
-![Uporedjivanje modela](images/bbx_statistics_by_model.png)
-
 ## Detekcija broja podignutih prstiju pomoću CNN modela
 
-Sveska u kojoj se može videti proces treniranja i evaluacije modela [https://www.kaggle.com/code/mrkkopr/raw-cnn](https://www.kaggle.com/code/mrkkopr/raw-cnn)
+![Statistike iz epoha](images/cnn_full_epoch_stats.png)
+
+Sveska u kojoj se može videti proces treniranja i evaluacije modela [raw-cnn](https://www.kaggle.com/code/mrkkopr/raw-cnn)
 
 Ponovo je vršena sistematična pretraga hiperparametara konvolutivne neuronske mreže, pri čemu su ispitivane sledeće kombinacije i to za
 1) čitavu sliku:
@@ -134,12 +135,12 @@ Najbolja konfiguracija bila je:
 - broj neurona u prvom skrivenom sloju potpuno povezane mreže: 128
 - verovatnoća gašenja neurona: 0.4
 
-Postignuta je tačnost od 88,83% na validacionom skupu u 99. epohi. Najveći skok u tačnosti je primećen u prve 23 epohe, kada je ona dostigla oko 84%, nakon čega je model imao veću tendenciju da se prepilagodi trening skupu, a ne da nauči karakteristike same raspodele. Postignuta tačnost na test skupu iznosila je 89,4%. 
+Postignuta je tačnost od 88,83% na validacionom skupu u 99. epohi. Najveći skok u tačnosti je primećen u prve 23 epohe, kada je ona dostigla oko 84%, nakon čega je model imao veću tendenciju da se prepilagodi trening skupu, a ne da nauči karakteristike same raspodele. Postignuta tačnost na test skupu iznosila je 89,4%. CNN je imao bolju preciznost i odziv za svaku od klasa u odnosu na klasične modele. 
 
 ![CNN bounding box matrica konfuzije](images/bbx_conf_matrix.png)
 ---
 
 ## Zaključak
 
-Kao najvažnija informacija modelu se pokazala lokalizacija šake na slici. U slučaju kada šaka nije lokalizovana, a i kada jeste, CNN model se pokazao kao bolji klasifikator.
+Kao najvažnija informacija modelu se pokazala lokacija šake na slici i uklanjanje šuma u vidu pozadine. CNN model je pokazao veću tačnost, preciznost i odziv za svaku od klasa u odnosu na klasične modele.
 
