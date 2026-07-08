@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 6
+names: ["0", "1", "2", "3", "4", "5"]
+
+roboflow:
+  workspace: hands-rirpj
+  project: fingers-numbers
+  version: 7
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/hands-rirpj/fingers-numbers/dataset/7

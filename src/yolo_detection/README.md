@@ -48,6 +48,8 @@ Jasno je da se praktično isti podatak nalazi u sva tri skupa. Samim tim model s
 
 Iako smo validacioni skup izdvojili nasumičnim izborom to nije bio najveći problem. U samom skupu podataka raspodela je jako loša sve slike su slikane sa slične udaljenosti u sličnim uslovima osvetljenja sa pozadinama u kojima se šaka jasno izdvaja.
 
+Sveska `01_yolo.ipynb` sadrži kod za trening i evaluaciju modela za prvi pokušaj. Može se izvršiti direktno uz korišćenje conda virtuelnog okruženja definisanog u fajlu `ai_env.yaml` datog u repozitorijumu.
+
 ### Pokušaj 2
 
 Za drugi pokušaj rešavanje našeg problema pronašli smo skup podataka [HaGRID](https://github.com/hukenovs/hagrid). Ovaj skup ima preko milion slika, sa preko 60.000 različitih osoba i scena bez ponavljanja slika i bez velike sličnosti u istim klasama. Samim tim ovaj skup omogućava jednostavno deljenje na skupove za trening, test i validaciju. Ipak slike u ovom skupu su FullHD rezolucije i ukupno zauzimaju preko 1.5TB memorije. Drugi problem je što su klase slika drugačije od onih koje su potrebne za naš projekat.
@@ -140,3 +142,9 @@ Kratka analiza prikazanih rezultata:
   - Preciznost i Odziv: Obe metrike beleže brz rast u početnim epohama i stabilizuju se na vrednostima blizu 99%, što ukazuje na izuzetno nizak procenat lažno pozitivnih i lažno negativnih detekcija.
   - mAP50: Srednja prosečna preciznost pri IoU pragu 0.5 dostiže stabilnu vrednost od 0.995 (99.5%) za sve klase kombinovano.
   - mAP50-95: Stroža i industrijski standardizovana metrika koja računa prosek kroz više IoU pragova (od 0.5 do 0.95) dostiže izvanrednih 0.86 (86%), što potvrđuje visoku robusnost i preciznost modela u kompleksnim i raznolikim realnim scenama.
+
+Sveska `02_yolo.ipynb` sadrži kod za kreiranje novog dataseta. Poželjno je da se izvrši na kaggle platformi, može se izvršavati i lokalno ali je potrebno preuzeti [ovaj dataset](https://www.kaggle.com/datasets/innominate817/hagrid-sample-30k-384p) i postaviti ga lokalno u direktorijum `/kaggle/input/datasets/innominate817/hagrid-sample-30k-384p/hagrid-sample-30k-384p`.
+
+Sveska `03_yolo.ipynb` sadrži kod za treniranje drugog modela. Poželjno je da se izvrši na kaggle platformi, može se izvršavati i lokalno ali je potrebno preuzeti [ovaj dataset](https://www.kaggle.com/datasets/markolazarevi/hagrid-fingers-yolo) i postaviti ga lokalno u direktorijum `/kaggle/input/datasets/markolazarevi/hagrid-fingers-yolo/fingers_yolo`.
+
+Skripta live-app.py može se pokrenuti nezavisno u viruelnom okruženju definisanog u fajlu `ai_env.yaml` datog u repozitorijumu.
