@@ -15,9 +15,7 @@ Model, iako je pokazao tačnost od preko 70%, ne uspeva dobro da klasifikuju sli
 
 ## <H2>Rezultati na novom skupu podataka</H2>
 
-Korišćeni skup je opisan u [../src/yolo_detection/README.md](https://github.com/marko-lazarevic/ml-fingers-matf/blob/main/src/yolo_detection/README.md), a u pitanju je skup [Fingers numbers](https://universe.roboflow.com/hands-rirpj/fingers-numbers). 
-
-Sveska: [Podsku skupa HaGRID](https://www.kaggle.com/datasets/markolazarevi/hagrid-fingers-yolo).
+Korišćeni skup je opisan u [../src/yolo_detection/README.md](https://github.com/marko-lazarevic/ml-fingers-matf/blob/main/src/yolo_detection/README.md), a u pitanju je skup [Podsku skupa HaGRID](https://www.kaggle.com/datasets/markolazarevi/hagrid-fingers-yolo).
 
 Da bi knn i svm sveske bile ponovno pokrenute potrebno je preuzeti skup podataka sa navedenog linka i raspakovati ga u novom kreiranom direktorijumu fingers_yolo koji treba da bude u direktorijumu iznad korenog direktorijuma repozitorijuma (ml-fingers-matf).
 Da bi sveska raw_cnn (konvolutivne) bila pokrenuta potrebno je prilagoditi sve putanje u kodu ili je jednostavno pokrenuti na sajtu [raw-cnn](https://www.kaggle.com/code/mrkkopr/raw-cnn) za šta je potrebna prijava. Sveska koja je dostupna u okviru repozitorijuma je preuzeta sa navedenog linka. 
